@@ -36,7 +36,6 @@
                         websocket.close();
                     websocket = new WebSocket( wsUri );
                     websocket.onopen = function (evt) {
-										debug("websocket.onopen");
                                         new QWebChannel(websocket, function(channel) {
                                         // make dialog object accessible globally
                                                 obj = channel.objects.obj;
