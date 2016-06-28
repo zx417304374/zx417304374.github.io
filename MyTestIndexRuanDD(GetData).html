@@ -1,8 +1,6 @@
 ﻿<html>
     <head>
         <title>WebSocket Chat Client</title>
-		<script type="text/javascript" src="./swfobject.js"></script>
-		<script type="text/javascript" src="./web_socket.js"></script>
         <script type="text/javascript" src="./qwebchannel.js"></script>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         </head>
@@ -10,14 +8,13 @@
         <h1>WebSocket Chat Client</h1>
         <p>
             <button onClick="initWebSocket();">Connect</button>
-            <button onClick="checkSocket();">State</button>
+            <button onClick="checkSocket();">读卡</button>
         </p>
         <p>
             <textarea id="debugTextArea" style="width:400px;height:200px;"></textarea>
         </p>
 
         <script type="text/javascript">
-			WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
             var debugTextArea = document.getElementById("debugTextArea");
             function debug(message) {
                 debugTextArea.value += message + "\n";
@@ -36,7 +33,6 @@
                         websocket.close();
                     websocket = new WebSocket( wsUri );
                     websocket.onopen = function (evt) {
-										debug("websocket.onopen");
                                         new QWebChannel(websocket, function(channel) {
                                         // make dialog object accessible globally
                                                 obj = channel.objects.obj;
