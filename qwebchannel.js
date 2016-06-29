@@ -1,44 +1,61 @@
 /****************************************************************************
 **
-** Copyright (C) 2016 The Qt Company Ltd.
-** Copyright (C) 2016 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com, author Milian Wolff <milian.wolff@kdab.com>
-** Contact: https://www.qt.io/licensing/
+** Copyright (C) 2015 The Qt Company Ltd.
+** Copyright (C) 2014 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com, author Milian Wolff <milian.wolff@kdab.com>
+** Contact: http://www.qt.io/licensing/
 **
 ** This file is part of the QtWebChannel module of the Qt Toolkit.
 **
-** $QT_BEGIN_LICENSE:LGPL$
+** $QT_BEGIN_LICENSE:LGPL21$
 ** Commercial License Usage
 ** Licensees holding valid commercial Qt licenses may use this file in
 ** accordance with the commercial license agreement provided with the
 ** Software or, alternatively, in accordance with the terms contained in
 ** a written agreement between you and The Qt Company. For licensing terms
-** and conditions see https://www.qt.io/terms-conditions. For further
-** information use the contact form at https://www.qt.io/contact-us.
+** and conditions see http://www.qt.io/terms-conditions. For further
+** information use the contact form at http://www.qt.io/contact-us.
 **
 ** GNU Lesser General Public License Usage
 ** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 3 as published by the Free Software
-** Foundation and appearing in the file LICENSE.LGPL3 included in the
-** packaging of this file. Please review the following information to
-** ensure the GNU Lesser General Public License version 3 requirements
-** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
+** General Public License version 2.1 or version 3 as published by the Free
+** Software Foundation and appearing in the file LICENSE.LGPLv21 and
+** LICENSE.LGPLv3 included in the packaging of this file. Please review the
+** following information to ensure the GNU Lesser General Public License
+** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
 **
-** GNU General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU
-** General Public License version 2.0 or (at your option) the GNU General
-** Public license version 3 or any later version approved by the KDE Free
-** Qt Foundation. The licenses are as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
-** included in the packaging of this file. Please review the following
-** information to ensure the GNU General Public License requirements will
-** be met: https://www.gnu.org/licenses/gpl-2.0.html and
-** https://www.gnu.org/licenses/gpl-3.0.html.
+** As a special exception, The Qt Company gives you certain additional
+** rights. These rights are described in The Qt Company LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
 **
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
 
 "use strict";
+
+//if(typeof JSON == 'undefined'){
+//
+//    $('head').append("<script type='text/javascript' src='json2.js'>");
+//
+//}
+
+if (!Array.prototype.forEach)
+{
+    Array.prototype.forEach = function(fun /*, thisp*/)
+    {
+        var len = this.length;
+        if (typeof fun != "function")
+            throw new TypeError();
+
+        var thisp = arguments[1];
+        for (var i = 0; i < len; i++)
+        {
+            if (i in this)
+                fun.call(thisp, this[i], i, this);
+        }
+    };
+}
 
 var QWebChannelMessageTypes = {
     signal: 1,
@@ -360,6 +377,7 @@ function QObject(name, data, webChannel)
         // initialize property cache with current value
         // NOTE: if this is an object, it is not directly unwrapped as it might
         // reference other QObject that we do not know yet
+        console.log("374");
         object.__propertyCache__[propertyIndex] = propertyInfo[3];
 
         if (notifySignalData) {
@@ -369,42 +387,47 @@ function QObject(name, data, webChannel)
             }
             addSignal(notifySignalData, true);
         }
-
-        Object.defineProperty(object, propertyName, {
-            configurable: true,
-            get: function () {
-                var propertyValue = object.__propertyCache__[propertyIndex];
-                if (propertyValue === undefined) {
-                    // This shouldn't happen
-                    console.warn("Undefined value in property cache for property \"" + propertyName + "\" in object " + object.__id__);
-                }
-
-                return propertyValue;
-            },
-            set: function(value) {
-                if (value === undefined) {
-                    console.warn("Property setter for " + propertyName + " called with undefined value!");
-                    return;
-                }
-                object.__propertyCache__[propertyIndex] = value;
-                webChannel.exec({
-                    "type": QWebChannelMessageTypes.setProperty,
-                    "object": object.__id__,
-                    "property": propertyIndex,
-                    "value": value
-                });
-            }
-        });
-
+        console.log("384");
+        //Object.defineProperty(object, propertyName, {
+        //    configurable: true,
+        //    get: function () {
+        //        console.log("388");
+        //        var propertyValue = object.__propertyCache__[propertyIndex];
+        //        if (propertyValue === undefined) {
+        //            // This shouldn't happen
+        //            console.warn("Undefined value in property cache for property \"" + propertyName + "\" in object " + object.__id__);
+        //        }
+        //
+        //        return propertyValue;
+        //    },
+        //    set: function(value) {
+        //        if (value === undefined) {
+        //            console.warn("Property setter for " + propertyName + " called with undefined value!");
+        //            return;
+        //        }
+        //        object.__propertyCache__[propertyIndex] = value;
+        //        webChannel.exec({
+        //            "type": QWebChannelMessageTypes.setProperty,
+        //            "object": object.__id__,
+        //            "property": propertyIndex,
+        //            "value": value
+        //        });
+        //    }
+        //});
+        console.log("410");
     }
 
     // ----------------------------------------------------------------------
 
+    console.log("414");
     data.methods.forEach(addMethod);
+    console.log("416");
 
     data.properties.forEach(bindGetterSetter);
+    console.log("418");
 
     data.signals.forEach(function(signal) { addSignal(signal, false); });
+    console.log("422");
 
     for (var name in data.enums) {
         object[name] = data.enums[name];
