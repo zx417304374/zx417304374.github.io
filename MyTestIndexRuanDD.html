@@ -1,9 +1,10 @@
 ﻿<html>
     <head>
         <title>WebSocket Chat Client</title>
-		<script type="text/javascript" src="./policyServer.js"></script>
-		<script type="text/javascript" src="./swfobject.js"></script>
-		<script type="text/javascript" src="./web_socket.js"></script>
+		<script type="text/javascript" src="scripts/swfobject.js"></script>  
+		<script type="text/javascript" src="scripts/jquery.js"></script>  
+		<script type="text/javascript" src="scripts/web_socket.js"></script>  
+		<script type="text/javascript" src="scripts/jquery.WebSocket.js"></script> 
         <script type="text/javascript" src="./qwebchannel.js"></script>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         </head>
@@ -11,7 +12,7 @@
         <h1>WebSocket Chat Client</h1>
         <p>
             <button onClick="initWebSocket();">Connect</button>
-            <button onClick="checkSocket();">读卡</button>
+            <button onClick="checkSocket();">State</button>
         </p>
         <p>
             <textarea id="debugTextArea" style="width:400px;height:200px;"></textarea>
@@ -37,6 +38,7 @@
                         websocket.close();
                     websocket = new WebSocket( wsUri );
                     websocket.onopen = function (evt) {
+										debug("websocket.onopen");
                                         new QWebChannel(websocket, function(channel) {
                                         // make dialog object accessible globally
                                                 obj = channel.objects.obj;
@@ -58,10 +60,10 @@
 
 
             function checkSocket() {
-                                        var mapTest =  {"FuncName": "getDataInfo",
+                                        var mapTest =  {"FuncName": "getData",
                                                                         "ArgCounts":"2",
                                                                         "Arg1" : "%PIN%|%CARDNO%|%IDNO%|%NAME%",
-                                                                        "Arg2": "21"};
+                                                                        "Arg2": "1"};
                                         obj.createObject("DevReader", pageId, function(dev){
                                                 dev.callFunc(mapTest ,function(reObj)
                                                 {

@@ -203,19 +203,12 @@
   };
   
   WebSocket.prototype.__createMessageEvent = function(type, data) {
-    if (window.MessageEvent && typeof(MessageEvent) == "function" && !window.opera) {
-      return new MessageEvent("message", {
-        "view": window,
-        "bubbles": false,
-        "cancelable": false,
-        "data": data
-      });
-    } else if (document.createEvent && window.MessageEvent && !window.opera) {
+    if (document.createEvent && window.MessageEvent && !window.opera) {
       var event = document.createEvent("MessageEvent");
-    	event.initMessageEvent("message", false, false, data, null, null, window, null);
+      event.initMessageEvent("message", false, false, data, null, null, window, null);
       return event;
     } else {
-      // Old IE and Opera, the latter one truncates the data parameter after any 0x00 bytes.
+      // IE and Opera, the latter one truncates the data parameter after any 0x00 bytes.
       return {type: type, data: data, bubbles: false, cancelable: false};
     }
   };
@@ -228,8 +221,6 @@
   WebSocket.CLOSING = 2;
   WebSocket.CLOSED = 3;
 
-  // Field to check implementation of WebSocket.
-  WebSocket.__isFlashImplementation = true;
   WebSocket.__initialized = false;
   WebSocket.__flash = null;
   WebSocket.__instances = {};
